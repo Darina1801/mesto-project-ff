@@ -1,16 +1,16 @@
 import './pages/index.css';
 
-import { onAppearPopup, onClosePopup } from './scripts/modal';
-import { createCard, likeCard as changeCardLike, removeCard } from './scripts/card'; 
+import { onAppearPopup, onClosePopup, mouseHandler } from './scripts/modal';
+import { createCard, removeCard, likeCard as changeCardLike } from './scripts/card'; 
 import { enableValidation, clearValidation } from './scripts/validation';
 import { getUserData, getCards, editProfile, addCard, deleteCard, likeCard, dislikeCard, setAvatar } from './scripts/api';
 
 const cardsList = document.querySelector('.places__list');
 const addButton = document.querySelector('.profile__add-button');
-const popupCloseButton = document.querySelector('.popup__close');
 const profileEditButton = document.querySelector('.profile__edit-button');
 const avatarEditPopup = document.querySelector('.popup_type_edit-avatar');
 const imageCardPopup = document.querySelector('.popup_type_image');
+const cardPopupImage = imageCardPopup.querySelector('.popup__image');
 const newCardFormPopup = document.querySelector('.popup_type_new-card');
 const profileEditPopup = document.querySelector('.popup_type_edit');
 const profileTitle = document.querySelector('.profile__title');
@@ -32,6 +32,11 @@ const validationConfig = {
 };
 
 let profileUserId;
+
+document.querySelectorAll('.popup').forEach((popup) => {
+    popup.classList.add('popup_is-animated');
+    popup.addEventListener('mousedown', mouseHandler);
+});
 
 function onLikeCard(event, cardId) {
     const isLiked = event.target.classList.contains('card__like-button_is-active');
@@ -69,8 +74,6 @@ function renderCards(cards, userId) {
 }
 
 function addImagePopupHandler(element) {
-    const cardPopupImage = imageCardPopup.querySelector('.popup__image');
-    const cardPopupCaption = imageCardPopup.querySelector('.popup__caption');
     cardPopupImage.src = element.target.src;
     cardPopupImage.alt = element.target.alt;
     cardPopupCaption.textContent = element.target.alt;
@@ -79,10 +82,6 @@ function addImagePopupHandler(element) {
 
 addButton.addEventListener('click', () => { 
     onAppearPopup(newCardFormPopup);
-});
-
-popupCloseButton.addEventListener('click', () => {
-    onClosePopup(newCardFormPopup);
 });
 
 addNewPlaceForm.addEventListener('submit', (event) => {
