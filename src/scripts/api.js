@@ -1,6 +1,6 @@
 const URL = 'https://mesto.nomoreparties.co';
-const TOKEN = ''; 
-const GROUP_ID = 'cohort-magistr-2';
+const TOKEN = '493b871d-1813-4354-b8a1-4527b37450bb'; 
+const GROUP_ID = 'high-education-web-developer-magistr_4';
 const BASE_URL = `${URL}/v1/${GROUP_ID}`;
 
 const config = {
