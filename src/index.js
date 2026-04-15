@@ -2,19 +2,24 @@ import './pages/index.css';
 
 import { initialCards } from './scripts/cards';
 import { renderCard, removeCard, likeCard } from './scripts/card';
-import { onAppearPopup, onClosePopup } from './scripts/modal';
+import { onAppearPopup, onClosePopup, mouseHandler } from './scripts/modal';
 
 const cardsList = document.querySelector('.places__list');
 const addButton = document.querySelector('.profile__add-button');
-const popupCloseButton = document.querySelector('.popup__close');
 const profileEditButton = document.querySelector('.profile__edit-button');
 const imageCardPopup = document.querySelector('.popup_type_image');
+const cardPopupImage = imageCardPopup.querySelector('.popup__image');
 const newCardFormPopup = document.querySelector('.popup_type_new-card');
 const profileEditPopup = document.querySelector('.popup_type_edit');
 const profileTitle = document.querySelector('.profile__title');
 const profileDescription = document.querySelector('.profile__description');
 const editProfileForm = document.forms['edit-profile'];
 const addNewPlaceForm = document.forms['new-place'];
+
+document.querySelectorAll('.popup').forEach((popup) => {
+    popup.classList.add('popup_is-animated');
+    popup.addEventListener('mousedown', mouseHandler);
+});
 
 function renderCards(cards) {
     cards.forEach((element) => {
@@ -23,7 +28,6 @@ function renderCards(cards) {
 }
 
 function addImagePopupHandler(element) {
-    const cardPopupImage = imageCardPopup.querySelector('.popup__image');
     cardPopupImage.src = element.target.src;
     cardPopupImage.alt = element.target.alt;
     onAppearPopup(imageCardPopup);
@@ -33,10 +37,6 @@ renderCards(initialCards);
 
 addButton.addEventListener('click', () => { 
     onAppearPopup(newCardFormPopup);
-});
-
-popupCloseButton.addEventListener('click', () => {
-    onClosePopup(newCardFormPopup);
 });
 
 addNewPlaceForm.addEventListener('submit', (event) => {
