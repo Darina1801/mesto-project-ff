@@ -1,7 +1,8 @@
 # Проектная работа Mesto
 
 [Ссылка на репозиторий](https://github.com/Darina1801/mesto-project-ff.git)
-[Ссылка на GitHub Pages](https://Darina1801.github.io/mesto-project-ff/)
+
+[Ссылка на GitHub Pages](https://darina1801.github.io/mesto-project-ff)
 
 ## Макет / Layout
 
