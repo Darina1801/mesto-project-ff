@@ -14,13 +14,13 @@ const config = {
 function getUserData() {
   return fetch(`${config.baseUrl}/users/me`, {
     headers: config.headers
-  }).then(response => handleResponse(response));
+  }).then(handleResponse);
 }
 
 function getCards() {
   return fetch(`${config.baseUrl}/cards`, {
     headers: config.headers
-  }).then(response => handleResponse(response));
+  }).then(handleResponse);
 }
 
 function editProfile(name, about) {
@@ -31,7 +31,7 @@ function editProfile(name, about) {
       name,
       about
     })
-  }).then(response => handleResponse(response));
+  }).then(handleResponse);
 }
 
 function addCard({name, link}) {
@@ -42,28 +42,28 @@ function addCard({name, link}) {
       name,
       link
     })
-  }).then(response => handleResponse(response));
+  }).then(handleResponse);
 }
 
 function deleteCard(cardId) {
   return fetch(`${config.baseUrl}/cards/${cardId}`, {
     method: 'DELETE',
     headers: config.headers
-  }).then(response => handleResponse(response));
+  }).then(handleResponse);
 }
 
 function likeCard(cardId) {
   return fetch(`${config.baseUrl}/cards/likes/${cardId}`, {
     method: 'PUT',
     headers: config.headers
-  }).then(response => handleResponse(response));
+  }).then(handleResponse);
 }
 
 function dislikeCard(cardId) {
   return fetch(`${config.baseUrl}/cards/likes/${cardId}`, {
     method: 'DELETE',
     headers: config.headers
-  }).then(response => handleResponse(response));
+  }).then(handleResponse);
 }
 
 function setAvatar(avatar) {
@@ -73,7 +73,7 @@ function setAvatar(avatar) {
     body: JSON.stringify({
       avatar
     })
-  }).then(response => handleResponse(response));
+  }).then(handleResponse);
 }
 
 function handleResponse(response) {

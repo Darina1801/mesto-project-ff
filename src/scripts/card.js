@@ -37,12 +37,16 @@ function createCard(element, userId, deleteCard, likeCard, addImagePopupHandler)
 
 function likeCard(event, likeCount) {
     event.target.classList.toggle('card__like-button_is-active')
-    const likesCounter = event.target.nextElementSibling; 
-    likesCounter.textContent = likeCount; 
+    const likesCounter = event.target.nextElementSibling;
+    likesCounter.textContent = likeCount;
+}
+
+function isCardLiked(event) {
+    return event.target.classList.contains('card__like-button_is-active');
 }
 
 function removeCard(card) {
     card.remove();
 }
 
-export { createCard, likeCard, removeCard };
+export { createCard, likeCard, isCardLiked, removeCard };
