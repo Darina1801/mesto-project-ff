@@ -1,7 +1,7 @@
 import './pages/index.css';
 
 import { onAppearPopup, onClosePopup, mouseHandler } from './scripts/modal';
-import { createCard, removeCard, likeCard as changeCardLike } from './scripts/card'; 
+import { createCard, removeCard, likeCard as changeCardLike, isCardLiked } from './scripts/card'; 
 import { enableValidation, clearValidation } from './scripts/validation';
 import { getUserData, getCards, editProfile, addCard, deleteCard, likeCard, dislikeCard, setAvatar } from './scripts/api';
 
@@ -11,6 +11,7 @@ const profileEditButton = document.querySelector('.profile__edit-button');
 const avatarEditPopup = document.querySelector('.popup_type_edit-avatar');
 const imageCardPopup = document.querySelector('.popup_type_image');
 const cardPopupImage = imageCardPopup.querySelector('.popup__image');
+const cardPopupCaption = imageCardPopup.querySelector('.popup__caption');
 const newCardFormPopup = document.querySelector('.popup_type_new-card');
 const profileEditPopup = document.querySelector('.popup_type_edit');
 const profileTitle = document.querySelector('.profile__title');
@@ -39,8 +40,7 @@ document.querySelectorAll('.popup').forEach((popup) => {
 });
 
 function onLikeCard(event, cardId) {
-    const isLiked = event.target.classList.contains('card__like-button_is-active');
-    const likeMethod = isLiked ? dislikeCard : likeCard; 
+    const likeMethod = isCardLiked(event) ? dislikeCard : likeCard; 
     likeMethod(cardId) 
         .then((card) => { 
             changeCardLike(event, card.likes.length);
@@ -62,10 +62,6 @@ function updateProfile(profile) {
     profileImage.style.backgroundImage = `url(${profile.avatar})`;
 }
 
-function resetForm(form) {
-    form.reset();
-    clearValidation(form, validationConfig);
-  }
 
 function renderCards(cards, userId) {
     cards.forEach((element) => {
@@ -94,19 +90,20 @@ addNewPlaceForm.addEventListener('submit', (event) => {
     };
 
     addCard(newCard)
-        .then((card) => { 
+        .then((card) => {
             const newCardNode = createCard(card, profileUserId, onDeleteCard, onLikeCard, addImagePopupHandler);
             cardsList.prepend(newCardNode);
+            addNewPlaceForm.reset();
+            clearValidation(addNewPlaceForm, validationConfig);
+            onClosePopup(newCardFormPopup);
         })
-        .finally(() => {
-            resetForm(addNewPlaceForm);
-        });
-    onClosePopup(newCardFormPopup);
+        .catch((error) => console.error(error));
 });
 
 profileEditButton.addEventListener('click', () => {
     editProfileForm.elements['edit-name'].value = profileTitle.innerText;
     editProfileForm.elements.description.value = profileDescription.innerText;
+    clearValidation(editProfileForm, validationConfig);
     onAppearPopup(profileEditPopup);
 });
 
@@ -118,12 +115,11 @@ editProfileForm.addEventListener('submit', (event) => {
     const description = editProfileForm.elements.description.value;
     
     editProfile(name, description)
-        .then(() => getUserData())
-        .then((profile) => updateProfile(profile))
-        .finally(() => {
-            resetForm(editProfileForm);
-        });
-    onClosePopup(profileEditPopup);
+        .then((profile) => {
+            updateProfile(profile);
+            onClosePopup(profileEditPopup);
+        })
+        .catch((error) => console.error(error));
 });
 
 function setAvatarListener() {
@@ -138,8 +134,14 @@ editAvatarForm.addEventListener('submit', (event) => {
     const popupButton = editAvatarForm.querySelector('.popup__button');
     popupButton.textContent = 'Сохранение...';
     const avatarLink = editAvatarForm.avatar.value;
-    setAvatar(avatarLink).then((profile) => updateProfile(profile));   
-    onClosePopup(avatarEditPopup);
+    setAvatar(avatarLink)
+        .then((profile) => {
+            updateProfile(profile);
+            editAvatarForm.reset();
+            clearValidation(editAvatarForm, validationConfig);
+            onClosePopup(avatarEditPopup);
+        })
+        .catch((error) => console.error(error));
 });
 
 Promise.all([getUserData(), getCards()])

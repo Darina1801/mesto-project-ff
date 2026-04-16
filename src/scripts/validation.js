@@ -5,7 +5,7 @@ export function addValidation(form, config) {
     inputList.forEach((input) => {
         input.addEventListener('input', () => {
             const isInputValid = validateInput(input, config);
-            toggleFormSubmitButton(inputList, submitButton, !!isInputValid);
+            toggleFormSubmitButton(inputList, submitButton, !isInputValid);
         })
     });
 }
